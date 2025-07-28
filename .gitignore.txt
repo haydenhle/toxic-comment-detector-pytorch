@@ -1,23 +1,10 @@
-# Bytecode and cache
-__pycache__/
-*.pyc
-
-# Model weights and saved files
+# Model files
 *.pth
 *.pkl
-
-# Virtual environment
-venv/
-.env/
 
 # Data files
 data/
 
-# Jupyter Notebook checkpoints
-.ipynb_checkpoints/
-
-# VS Code settings
-.vscode/
-
-# Logs
-*.log
+# Caches
+__pycache__/
+*.pyc
