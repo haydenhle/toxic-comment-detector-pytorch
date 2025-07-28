@@ -1,38 +1,46 @@
+# import libraries
 import torch
 import torch.nn as nn
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
+import joblib
+
+# import model
 from models.toxic_model import ToxicCommentModel
 
 # config
-MODEL_PATH = "model.pth"               # path to your saved model
-VECTORIZER_PATH = "vectorizer.pkl"     # path to saved TF-IDF vectorizer
-LABELS = ['toxic', 'severe_toxic', 'obscene', 'threat', 'insult', 'identity_hate']
+MODEL_PATH = "model.pth" # path to model weights
+VECTORIZER_PATH = "vectorizer.pkl" # path to TF-IDF vectorizer
+LABELS = ['toxic', 'severe_toxic', 'obscene', 'threat', 'insult', 'identity_hate'] # output labels
+# sample test phrases
 INPUT_TEXTS = [
     "You are the worst person ever!",
     "I hope you have a great day :)",
     "This is so dumb and offensive"
 ]
 
-# import TF-IDF vectorizer
-import joblib
+# load TF-IDF vectorizer (limit 10000)
 vectorizer = joblib.load(VECTORIZER_PATH)
 
-# import model
+# convert input texts to vectors
+X = vectorizer.transform(INPUT_TEXTS).toarray()
+
+# load model
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-model = ToxicCommentModel(input_dim=10000, hidden_dim=256, output_dim=6).to(device)
-model.load_state_dict(torch.load(MODEL_PATH, map_location=device))
-model.eval()
+model = ToxicCommentModel(input_dim=10000, hidden_dim=256, output_dim=6).to(device) # recreate model struct
+model.load_state_dict(torch.load(MODEL_PATH, map_location=device)) # load trained weights
+model.eval() # set mode to eval
 
 # make predictions
-inputs = torch.tensor(X, dtype=torch.float32).to(device)
+inputs = torch.tensor(X, dtype=torch.float32).to(device) # convert input to tensor
 with torch.no_grad():
-    outputs = model(inputs)
+    outputs = model(inputs) # run forward pass
 
 # interpret predictions
-predictions = outputs.cpu().numpy()
-threshold = 0.5  # Any output > 0.5 is considered a "positive" label
+predictions = outputs.cpu().numpy() # move predictions to CPU and convert to NumPy
+threshold = 0.5
 
+# print predictions
 for i, text in enumerate(INPUT_TEXTS):
     print(f"\nComment: {text}")
     for j, label in enumerate(LABELS):
