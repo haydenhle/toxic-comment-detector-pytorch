@@ -31,15 +31,15 @@ toxic-comment-detector-pytorch/
 └── README.md # Project documentation
 
 Getting Started
-1. Clone repository
+1. Clone repository:
    git clone https://github.com/haydenhle/toxic-comment-detector-pytorch.git
-2. Install Dependencies
+2. Install Dependencies:
    pip install -r requirements.txt
-3. Prepare Dataset https://www.kaggle.com/competitions/jigsaw-toxic-comment-classification-challenge/data
-   place train.csv from Jigsaw dataset on Kaggle into data folder
-4. Training
+3. Prepare Dataset from 'https://www.kaggle.com/competitions/jigsaw-toxic-comment-classification-challenge/data'
+   and place train.csv from Jigsaw dataset on Kaggle into data folder
+4. Training:
    python train.py
-5. Prediction
+5. Prediction:
    python predict.py
 
 Example Output:
